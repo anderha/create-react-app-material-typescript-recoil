@@ -1,11 +1,8 @@
 
-	import * as React from "react";
-	import * as ReactDOM from "react-dom";
-	import { ReduxRoot } from "./ReduxRoot";
-
-
-
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { RecoilRootProvider } from "./recoilConfig/RecoilRootProvider";
 
 const rootEl = document.getElementById("root");
-ReactDOM.render(<ReduxRoot />, rootEl);
+ReactDOM.render(<RecoilRootProvider />, rootEl);
 

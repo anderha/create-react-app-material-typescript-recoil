@@ -2,8 +2,7 @@
 import { Button, Dialog, DialogActions, DialogTitle, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import * as React from "react";
-import { useActions } from "../actions";
-import * as TodoActions from "../actions/todo";
+import { useAddTodo } from "../controller/todosController";
 
 interface Props {
 	open: boolean;
@@ -14,10 +13,10 @@ export function TodoDialog(props: Props) {
 	const { open, onClose } = props;
 	const classes = useStyles();
 	const [newTodoText, setNewTodoText] = React.useState("");
-	const todoActions = useActions(TodoActions);
+	const addTodo = useAddTodo()
 
 	const handleClose = () => {
-		todoActions.addTodo({
+		addTodo({
 			id: Math.random(),
 			completed: false,
 			text: newTodoText,

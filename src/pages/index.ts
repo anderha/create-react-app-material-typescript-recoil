@@ -1,2 +1,3 @@
-export * from "./HomePage";
-export * from "./TodoPage";
+export * from './HomePage';
+export * from './JokePage';
+export * from './TodoPage';

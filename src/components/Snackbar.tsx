@@ -2,20 +2,16 @@
 import { makeStyles, Snackbar as MuiSnackbar } from '@material-ui/core';
 import { Alert } from "@material-ui/lab";
 import * as React from "react";
-import { useSelector } from "react-redux";
-import { useActions } from "../actions";
-import * as SnackbarEventActions from "../actions/snackbarEvent";
+import { useRecoilValue } from 'recoil';
+import { useDeleteSnackbarEvent } from '../controller/snackbarEventsController';
 import { SnackbarEvent } from "../model/snackbarEvent";
-import { RootState } from "../reducers";
+import { snackbarEventsState } from '../state/snackbarEventsState';
 
 export function Snackbar() {
 	const classes = useStyles();
-	const snackbarEvents: SnackbarEvent[] = useSelector(
-		(state: RootState) => state.snackbarEvents
-	);
-	const snackbarEventActions: typeof SnackbarEventActions = useActions(
-		SnackbarEventActions
-	);
+	const snackbarEvents: SnackbarEvent[] = useRecoilValue(snackbarEventsState)
+	const deleteSnackbarEvent = useDeleteSnackbarEvent()
+
 	const [currentEvent, setCurrentEvent] = React.useState(
 		snackbarEvents.length > 0 ? snackbarEvents[0] : undefined
 	);
@@ -34,7 +30,7 @@ export function Snackbar() {
 			return;
 		}
 		if (currentEvent) {
-			snackbarEventActions.deleteSnackbarEvent(currentEvent);
+			deleteSnackbarEvent(currentEvent);
 		}
 	};
 

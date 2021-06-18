@@ -6,27 +6,30 @@ import { makeStyles } from "@material-ui/styles";
 import * as React from "react";
 import { Router } from "react-router-dom";
 import { RouterSwitch } from 'react-typesafe-routes';
+import { useRecoilValue } from 'recoil';
 import { Drawer } from "./components/Drawer";
-import { history } from "./configureStore";
-import { withRoot } from "./withRoot";
-import { useSelector } from 'react-redux';
-import { useActions } from './actions';
-import * as ConfigActions from './actions/config';
-import { RootState } from "./reducers";
-import { router } from "./Router";
-
 import { Snackbar } from './components/Snackbar';
+import { useCloseDrawer, useOpenDrawer } from "./controller/drawerController";
+import { history } from "./history";
+import { router } from "./Router";
+import { drawerState } from "./state/drawerState";
+import { withRoot } from "./withRoot";
 
 function App() {
 	const classes = useStyles();
-	const drawerOpen: boolean = useSelector((state: RootState) => state.drawerOpen);
-	const configActions: typeof ConfigActions = useActions(ConfigActions);
+	const drawerOpen: boolean = useRecoilValue(drawerState)
+	const closeDrawer = useCloseDrawer()
+	const openDrawer = useOpenDrawer()
 	const isMobile = useMediaQuery((theme: Theme) =>
 		theme.breakpoints.down("sm")
 	);
 
 	const handleDrawerToggle = () => {
-		configActions.setDrawerOpen(!drawerOpen);
+		if (drawerOpen) {
+			closeDrawer()
+		} else {
+			openDrawer()
+		}
 	};
 
 
@@ -51,7 +54,7 @@ function App() {
 								noWrap={isMobile}
 							>
 								Create-React-App with Material-UI, Typescript,
-								Redux and Routing
+								Recoil and Routing
 							</Typography>
 						</Toolbar>
 					</AppBar>
@@ -97,6 +100,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 			height: "calc(100% - 64px)",
 			marginTop: 64,
 		},
+		overflowX: 'auto'
 	},
 }));
 

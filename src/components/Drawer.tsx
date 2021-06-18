@@ -3,22 +3,28 @@ import { Badge, Divider, Drawer as DrawerMui, Hidden, List, ListItem, ListItemIc
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import HomeIcon from '@material-ui/icons/Home';
 import * as React from 'react';
-import { Todo } from '../model/todo';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reducers';
-import { router } from '../Router';
-import { useRoutesActive } from 'react-typesafe-routes';
 import { useHistory } from 'react-router-dom';
-import { useActions } from '../actions';
-import * as ConfigActions from '../actions/config';
+import { useRoutesActive } from 'react-typesafe-routes';
+import { useRecoilValue } from 'recoil';
+import { useCloseDrawer, useOpenDrawer } from '../controller/drawerController';
+import { Todo } from '../model/todo';
+import { router } from '../Router';
+import { drawerState } from '../state/drawerState';
+import { todosState } from '../state/todosState';
 
 export function Drawer() {
 	const classes = useStyles();
-	const drawerOpen: boolean = useSelector((state: RootState) => state.drawerOpen);
-	const configActions: typeof ConfigActions = useActions(ConfigActions);
+	const drawerOpen: boolean = useRecoilValue(drawerState)
+	const closeDrawer = useCloseDrawer()
+	const openDrawer = useOpenDrawer()
+
 
 	const handleDrawerToggle = () => {
-		configActions.setDrawerOpen(!drawerOpen);
+		if (drawerOpen) {
+			closeDrawer()
+		} else {
+			openDrawer()
+		}
 	};
 
 	return (
@@ -56,12 +62,13 @@ export function Drawer() {
 
 function Content() {
 	const classes = useStyles();
-	const todoList = useSelector((state: RootState) => state.todoList);
+	const todoList = useRecoilValue(todosState);
 	const history = useHistory();
 
-	const { home, todo } = useRoutesActive({
+	const { home, todo, joke } = useRoutesActive({
 		home: router.home,
 		todo: router.todo,
+		joke: router.joke
 	});
 
 	return (
@@ -83,6 +90,14 @@ function Content() {
 						<TodoIcon todoList={todoList} />
 					</ListItemIcon>
 					<ListItemText primary="Todo" />
+				</ListItem>
+			</List>
+			<List>
+				<ListItem button onClick={() => history.push(router.joke().$)} selected={joke}>
+					<ListItemIcon>
+						<FormatListNumberedIcon />
+					</ListItemIcon>
+					<ListItemText primary="Joke" />
 				</ListItem>
 			</List>
 		</div>

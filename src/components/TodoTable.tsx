@@ -3,22 +3,25 @@ import { Checkbox, IconButton, Paper, Table, TableBody, TableCell, TableHead, Ta
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/styles";
 import * as React from "react";
-import { useSelector } from "react-redux";
-import { useActions } from "../actions";
-import * as TodoActions from "../actions/todo";
+import {
+	useRecoilValue
+} from 'recoil';
+import { useCompleteTodo, useDeleteTodo, useUncompleteTodo } from "../controller/todosController";
 import { Todo } from "../model/index";
-import { RootState } from "../reducers/index";
+import { todosState } from "../state/todosState";
 
 export function TodoTable() {
 	const classes = useStyles();
-	const todoList = useSelector((state: RootState) => state.todoList);
-	const todoActions = useActions(TodoActions);
+	const todos = useRecoilValue(todosState)
+	const uncompleteTodo = useUncompleteTodo()
+	const completeTodo = useCompleteTodo()
+	const deleteTodo = useDeleteTodo()
 
 	const onRowClick = (todo: Todo) => {
 		if (todo.completed) {
-			todoActions.uncompleteTodo(todo.id);
+			uncompleteTodo(todo.id);
 		} else {
-			todoActions.completeTodo(todo.id);
+			completeTodo(todo.id);
 		}
 	};
 
@@ -33,7 +36,7 @@ export function TodoTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{todoList.map((n: Todo) => {
+					{todos.map((n: Todo) => {
 						return (
 							<TableRow
 								key={n.id}
@@ -49,7 +52,7 @@ export function TodoTable() {
 										aria-label="Delete"
 										color="default"
 										onClick={() =>
-											todoActions.deleteTodo(n.id)
+											deleteTodo(n.id)
 										}
 									>
 										<DeleteIcon />
