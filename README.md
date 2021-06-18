@@ -37,7 +37,7 @@ npm start
 
 ## The idea behind the example
 
-This example demonstrate how you can use [Create React App](https://github.com/facebookincubator/create-react-app) with [TypeScript](https://github.com/Microsoft/TypeScript).
+This example demonstrates how you can use [Create React App](https://github.com/facebookincubator/create-react-app) with [TypeScript](https://github.com/Microsoft/TypeScript) and [Recoil](https://recoiljs.org/).
 
 ## Contributors
 
